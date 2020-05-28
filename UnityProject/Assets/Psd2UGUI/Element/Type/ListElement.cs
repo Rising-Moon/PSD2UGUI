@@ -49,14 +49,17 @@ namespace Psd2UGUI.Element.Type
             //计算spacing
             var spacing = Vector2.zero;
             var item11 = layout[new Vector2Int(1, 1)];
-            var item21 = layout[new Vector2Int(2, 1)];
+            if (layout.ContainsKey(new Vector2Int(2, 1)))
+            {
+                var item21 = layout[new Vector2Int(2, 1)];
+                spacing.y = item21.Top - item11.Top - item11.Height;
+            }
+
             if (layout.ContainsKey(new Vector2Int(1, 2)))
             {
                 var item12 = layout[new Vector2Int(1, 2)];
                 spacing.x = item12.Left - item11.Left - item11.Width;
             }
-
-            spacing.y = item21.Top - item11.Top - item11.Height;
             //计算cell size
             var cellSize = new Vector2(item11.Width, item11.Height);
 
