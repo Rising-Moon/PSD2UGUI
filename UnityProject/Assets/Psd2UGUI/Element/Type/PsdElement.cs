@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using SubjectNerd.PsdImporter.PsdParser;
 using UnityEditor;
 using UnityEngine;
@@ -44,12 +46,15 @@ namespace Psd2UGUI.Element.Type
         public ElementType type;
         public IPsdLayer[] childs;
 
+        protected bool canShow;
+
         protected PsdElement(string name, IPsdLayer layer, ElementType type, IPsdLayer[] childs)
         {
             this.name = name;
             this.layer = layer;
             this.type = type;
             this.childs = childs;
+            canShow = true;
         }
 
         //根据其类型生成相应的Element
@@ -68,6 +73,34 @@ namespace Psd2UGUI.Element.Type
             if (type == ElementType.SelectBox)
                 return new SelectBoxElement(name, layer, type, childs);
             return new PsdElement(name, layer, type, childs);
+        }
+
+        //根据名字匹配对应的类型
+        public static void GetType(string name)
+        {
+            var types = Assembly.GetCallingAssembly().GetTypes();
+            var thisType = typeof(PsdElement);
+            var elementList = new List<System.Type>();
+            foreach (var type in types)
+            {
+                var baseType = type.BaseType;
+                if (thisType.Name == baseType.Name)
+                {
+                    elementList.Add(type);
+                }
+            }
+
+            foreach (var element in elementList)
+            {
+                Debug.LogError(element.Name);
+                var obj = Activator.CreateInstance<PsdElement>();
+            }
+        }
+
+        //判断当前类型
+        protected static bool CheckType(string name)
+        {
+            return false;
         }
 
         //获取Element上的Texture2D

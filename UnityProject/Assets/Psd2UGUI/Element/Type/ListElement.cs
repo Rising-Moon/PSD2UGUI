@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Psd2UGUI.Utils;
 using SubjectNerd.PsdImporter.PsdParser;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +21,11 @@ namespace Psd2UGUI.Element.Type
             Background = FindChildElement(backgroundSuffix);
             if (Background != null && Background.HasImage)
                 BackgroundPiece = new TexturePiece(name + backgroundSuffix, GetTexture2D(Background));
+            else
+            {
+                canShow = false;
+                P2UUtil.ShowError("列表:" + name + "需要有一张背景图来确定列表区域");
+            }
         }
 
         public override void ModifyToPreview(RectTransform root, RectTransform t)
@@ -60,6 +67,7 @@ namespace Psd2UGUI.Element.Type
                 var item12 = layout[new Vector2Int(1, 2)];
                 spacing.x = item12.Left - item11.Left - item11.Width;
             }
+
             //计算cell size
             var cellSize = new Vector2(item11.Width, item11.Height);
 
@@ -158,7 +166,15 @@ namespace Psd2UGUI.Element.Type
                 var suffix = Regex.Match(layer.Name, regexStr1).ToString();
                 int row = Convert.ToInt32(Regex.Match(suffix, regexStr2).ToString());
                 var column = Convert.ToInt32(Regex.Match(suffix, regexStr3).ToString());
-                layout.Add(new Vector2Int(row, column), layer);
+                var key = new Vector2Int(row, column);
+                if (!layout.ContainsKey(key))
+                    layout.Add(key, layer);
+                else
+                {
+                    var error = "列表中:" + layer.Name + " 位置命名重复";
+                    Debug.LogError(error);
+                    P2UUtil.ShowError(error);
+                }
             }
 
             return layout;

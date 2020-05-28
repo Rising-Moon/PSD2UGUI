@@ -1,3 +1,4 @@
+using Psd2UGUI.Utils;
 using SubjectNerd.PsdImporter.PsdParser;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,11 @@ namespace Psd2UGUI.Element.Type
             normal = FindChildElement(normalSuffix);
             if (normal != null && normal.HasImage)
                 normalPiece = new TexturePiece(name + normalSuffix, GetTexture2D(normal));
+            else
+            {
+                canShow = false;
+                P2UUtil.ShowError("按钮:" + name + "至少要有一张正常态的图片");
+            }
 
             pressed = FindChildElement(pressedSuffix);
             if (pressed != null && pressed.HasImage)
@@ -33,11 +39,6 @@ namespace Psd2UGUI.Element.Type
             disabled = FindChildElement(disabledSuffix);
             if (disabled != null && disabled.HasImage)
                 disabledPiece = new TexturePiece(name + disabledSuffix, GetTexture2D(disabled));
-
-            if (normal == null)
-            {
-                Debug.LogError("按钮图片缺失");
-            }
         }
 
         //获取所有可导出图片
@@ -49,6 +50,9 @@ namespace Psd2UGUI.Element.Type
         //生成Preview
         public override void ModifyToPreview(RectTransform root, RectTransform t)
         {
+            if (!canShow)
+                return;
+
             ModifySize(root, t, this.normal);
             Rect btnRect = new Rect(0, 0, this.normal.Width, this.normal.Height);
 
@@ -77,6 +81,9 @@ namespace Psd2UGUI.Element.Type
         //生成UI
         public override void ModifyToUi(RectTransform root, RectTransform t, string[] sourceDirs)
         {
+            if (!canShow)
+                return;
+
             ModifySize(root, t, normal);
 
             Button button = t.GetComponent<Button>();

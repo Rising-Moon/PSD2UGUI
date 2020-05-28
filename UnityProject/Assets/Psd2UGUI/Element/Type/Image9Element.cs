@@ -1,3 +1,4 @@
+using Psd2UGUI.Utils;
 using SubjectNerd.PsdImporter.PsdParser;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,10 +21,20 @@ namespace Psd2UGUI.Element.Type
             Png9 = FindChildElement(png9Suffix);
             if (Png9 != null)
                 Png9Piece = new TexturePiece(name, GetTexture2D(Png9), true);
+            else
+            {
+                canShow = false;
+                P2UUtil.ShowError("九宫格图:" + name + "需要有一张九宫格大小的图");
+            }
 
             Preview = FindChildElement(previewSuffix);
             if (Preview != null)
                 PreviewPiece = new TexturePiece(name + previewSuffix, GetTexture2D(Preview), false);
+            else
+            {
+                canShow = false;
+                P2UUtil.ShowError("九宫格图:" + name + "需要有一张预览图来决定其大小");
+            }
         }
 
         public override void ModifyToPreview(RectTransform root, RectTransform t)

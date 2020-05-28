@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Psd2UGUI.Element;
 using Psd2UGUI.Element.Type;
+using Psd2UGUI.Utils;
 using SubjectNerd.PsdImporter.PsdParser;
-using TMPro;
 using UnityEditor;
-using UnityEditor.Sprites;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 using Directory = UnityEngine.Windows.Directory;
 using Object = UnityEngine.Object;
@@ -312,6 +307,9 @@ namespace Psd2UGUI
                 //解析为PsdElement
                 //分析其类型
                 PsdElement.ElementType type = PsdElement.ElementType.Group;
+
+                //PsdElement.GetType(elementName);
+
                 if (layer.HasImage)
                 {
                     type = PsdElement.ElementType.Image;
@@ -355,6 +353,9 @@ namespace Psd2UGUI
                 }
                 else
                 {
+                    string error = "图层命名重复:" + layerName;
+                    error = error.Replace("-", "/");
+                    P2UUtil.ShowError(error);
                     Debug.LogError("图层命名重复:" + layerName);
                 }
 
