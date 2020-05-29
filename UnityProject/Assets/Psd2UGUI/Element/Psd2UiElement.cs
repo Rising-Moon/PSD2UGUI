@@ -9,5 +9,6 @@ namespace Psd2UGUI.Element
     public class Psd2UiElement : MonoBehaviour
     {
         public PsdElement.ElementType type;
+        public bool linkPsd = true;
     }
 }

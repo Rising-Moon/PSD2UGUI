@@ -20,7 +20,7 @@ namespace Psd2UGUI
         //导出文件夹
         public Object exportFolder;
         //预览图透明度
-        [Range(0, 1)] public float alpha;
+        [Range(0, 1)] public float alpha = 0.3f;
 
         PsdDocument psd;
         RectTransform rectTransform;
@@ -29,6 +29,8 @@ namespace Psd2UGUI
 
         //显示图片边界
         public bool drawGimzos = false;
+        //显示RayCast区域
+        public bool drawRayCast = false;
 
         //psd图片Map
         private Dictionary<string, PsdElement> elementMap;
@@ -89,6 +91,10 @@ namespace Psd2UGUI
 
             //生成UI
             CreateUi();
+
+            //将预览界面提到最前
+            if (preview != null)
+                preview.transform.SetAsLastSibling();
         }
 
         //预览UI界面
@@ -238,6 +244,10 @@ namespace Psd2UGUI
                 {
                     go = uguiElementMap[elementName].gameObject;
                     parent = go.transform.parent;
+                    Psd2UiElement psd2UiElement = go.GetComponent<Psd2UiElement>();
+                    //当UI没有勾选对应到PSD时则不进行处理
+                    if (!psd2UiElement.linkPsd)
+                        continue;
                 }
                 else
                 {
@@ -307,8 +317,6 @@ namespace Psd2UGUI
                 //解析为PsdElement
                 //分析其类型
                 PsdElement.ElementType type = PsdElement.ElementType.Group;
-
-                //PsdElement.GetType(elementName);
 
                 if (layer.HasImage)
                 {
@@ -401,16 +409,35 @@ namespace Psd2UGUI
 
         private void OnDrawGizmos()
         {
-            if (!drawGimzos)
-                return;
-            Vector3[] vectors = new Vector3[4];
-            foreach (var t in GetComponentsInChildren<RectTransform>())
+            if (drawGimzos)
             {
-                t.GetWorldCorners(vectors);
-                Gizmos.DrawLine(vectors[0], vectors[1]);
-                Gizmos.DrawLine(vectors[1], vectors[2]);
-                Gizmos.DrawLine(vectors[2], vectors[3]);
-                Gizmos.DrawLine(vectors[3], vectors[0]);
+                Vector3[] vectors = new Vector3[4];
+                foreach (var t in GetComponentsInChildren<RectTransform>())
+                {
+                    t.GetWorldCorners(vectors);
+                    Gizmos.DrawLine(vectors[0], vectors[1]);
+                    Gizmos.DrawLine(vectors[1], vectors[2]);
+                    Gizmos.DrawLine(vectors[2], vectors[3]);
+                    Gizmos.DrawLine(vectors[3], vectors[0]);
+                }
+            }
+
+            if (drawRayCast)
+            {
+                foreach (MaskableGraphic g in FindObjectsOfType<MaskableGraphic>())
+                {
+                    if (g.raycastTarget)
+                    {
+                        Vector3[] vectors = new Vector3[4];
+                        RectTransform rectTransform = g.transform as RectTransform;
+                        if (rectTransform != null) rectTransform.GetWorldCorners(vectors);
+                        Gizmos.color = Color.blue;
+                        for (int i = 0; i < 4; i++)
+                        {
+                            Gizmos.DrawLine(vectors[i], vectors[(i + 1) % 4]);
+                        }
+                    }
+                }
             }
         }
 

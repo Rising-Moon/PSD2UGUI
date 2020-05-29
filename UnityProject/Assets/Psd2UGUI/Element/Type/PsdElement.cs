@@ -75,34 +75,6 @@ namespace Psd2UGUI.Element.Type
             return new PsdElement(name, layer, type, childs);
         }
 
-        //根据名字匹配对应的类型
-        public static void GetType(string name)
-        {
-            var types = Assembly.GetCallingAssembly().GetTypes();
-            var thisType = typeof(PsdElement);
-            var elementList = new List<System.Type>();
-            foreach (var type in types)
-            {
-                var baseType = type.BaseType;
-                if (thisType.Name == baseType.Name)
-                {
-                    elementList.Add(type);
-                }
-            }
-
-            foreach (var element in elementList)
-            {
-                Debug.LogError(element.Name);
-                var obj = Activator.CreateInstance<PsdElement>();
-            }
-        }
-
-        //判断当前类型
-        protected static bool CheckType(string name)
-        {
-            return false;
-        }
-
         //获取Element上的Texture2D
         public virtual TexturePiece[] GetAllTexturePieces()
         {
