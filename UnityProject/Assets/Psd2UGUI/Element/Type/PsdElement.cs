@@ -111,14 +111,16 @@ namespace Psd2UGUI.Element.Type
         {
             var parent = t.parent;
             t.SetParent(root);
+            t.pivot = new Vector2(0.5f, 0.5f);
 
             Vector2 rootSize = root.rect.size;
-            Vector2 rootOffest = (Vector2) (root.position) - rootSize / 2f;
+            Vector2 rootOffest = -rootSize / 2f;
 
             var texLayer = layer;
-            t.anchoredPosition = new Vector2(texLayer.Left + texLayer.Width / 2f,
-                                     rootSize.y - (texLayer.Top + texLayer.Height / 2f) - 1) +
-                                 rootOffest;
+            t.anchoredPosition = new Vector2(
+                                     texLayer.Left + texLayer.Width / 2f,
+                                     rootSize.y - (texLayer.Top + texLayer.Height / 2f) - 1
+                                 ) + rootOffest;
             t.sizeDelta = new Vector2(texLayer.Width, texLayer.Height);
 
             t.SetParent(parent);
