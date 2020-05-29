@@ -30,7 +30,7 @@ namespace Psd2UGUI
         //显示图片边界
         public bool drawGimzos = false;
         //显示RayCast区域
-        public bool drawRayCast = false;
+        public bool drawRaycast = false;
 
         //psd图片Map
         private Dictionary<string, PsdElement> elementMap;
@@ -422,7 +422,7 @@ namespace Psd2UGUI
                 }
             }
 
-            if (drawRayCast)
+            if (drawRaycast)
             {
                 foreach (MaskableGraphic g in FindObjectsOfType<MaskableGraphic>())
                 {

@@ -1,3 +1,4 @@
+using Psd2UGUI.Utils;
 using SubjectNerd.PsdImporter.PsdParser;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,9 +21,20 @@ namespace Psd2UGUI.Element.Type
             normal = FindChildElement(normalSuffix);
             if (normal != null)
                 normalPiece = new TexturePiece(name + normalSuffix, GetTexture2D(normal));
+            else
+            {
+                canShow = false;
+                P2UUtil.ShowError("勾选框:" + name + "需要有一张未选择态的图");
+            }
+
             select = FindChildElement(selectSuffix);
             if (select != null)
                 selectPiece = new TexturePiece(name + selectSuffix, GetTexture2D(select));
+            else
+            {
+                canShow = false;
+                P2UUtil.ShowError("勾选框:" + name + "需要有一张选择态的图");
+            }
         }
 
         public override void ModifyToPreview(RectTransform root, RectTransform t)
