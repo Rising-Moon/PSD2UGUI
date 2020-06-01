@@ -79,8 +79,10 @@ namespace Psd2UGUI
                 return;
 
             //调整页面大小
-            rectTransform.sizeDelta = new Vector2(psd.Width, psd.Height);
-            rectTransform.anchoredPosition = Vector2.zero;
+            var offset = rectTransform.anchorMax - rectTransform.anchorMin;
+            var psdSize = new Vector2(psd.Width, psd.Height);
+            rectTransform.sizeDelta = new Vector2(psd.Width, psd.Height) * (Vector2.one - offset);
+            rectTransform.anchoredPosition = ((Vector2.one - offset) / 2 - rectTransform.anchorMin) * psdSize;
 
             //根据psd图层生成map
             elementMap = new Dictionary<string, PsdElement>();
