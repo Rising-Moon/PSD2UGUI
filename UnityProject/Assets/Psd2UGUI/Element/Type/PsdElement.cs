@@ -13,6 +13,7 @@ namespace Psd2UGUI.Element.Type
         [Serializable]
         public enum ElementType
         {
+            Null,
             Group,
             Image,
             Image9,
@@ -46,7 +47,7 @@ namespace Psd2UGUI.Element.Type
         public ElementType type;
         public IPsdLayer[] childs;
 
-        protected bool canShow;
+        public bool canShow;
 
         protected PsdElement(string name, IPsdLayer layer, ElementType type, IPsdLayer[] childs)
         {

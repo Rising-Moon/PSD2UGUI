@@ -5,6 +5,11 @@
 [Bb]uilds/
 [Ll]ogs/
 
+# 导出图片文件夹
+UnityProject/Assets/Psd2UGUI/Example/Export/
+UnityProject/Assets/psd/export/
+UnityProject/Assets/psd/export.meta
+
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # [Aa]ssets/AssetStoreTools*
 

@@ -24,7 +24,7 @@ namespace Psd2UGUI.Element.Type
             else
             {
                 canShow = false;
-                P2UUtil.ShowError("勾选框:" + name + "需要有一张未选择态的图");
+                P2UUtil.AddError("勾选框:" + name + "需要有一张未选择态的图");
             }
 
             select = FindChildElement(selectSuffix);
@@ -33,7 +33,7 @@ namespace Psd2UGUI.Element.Type
             else
             {
                 canShow = false;
-                P2UUtil.ShowError("勾选框:" + name + "需要有一张选择态的图");
+                P2UUtil.AddError("勾选框:" + name + "需要有一张选择态的图");
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using Psd2UGUI.Element;
 using Psd2UGUI.Element.Type;
 using Psd2UGUI.Utils;
@@ -236,6 +237,9 @@ namespace Psd2UGUI
                 var elementName = pair.Key;
                 var element = pair.Value;
 
+                if (!element.canShow)
+                    continue;
+
                 Transform parent = null;
 
                 //查看对应GameObject是否存在，不存在则创建一个
@@ -287,6 +291,9 @@ namespace Psd2UGUI
                 var elementName = pair.Key;
                 var element = pair.Value;
 
+                if (!element.canShow)
+                    continue;
+
                 GameObject go = null;
                 go = new GameObject(elementName);
                 RectTransform t = go.AddComponent<RectTransform>();
@@ -315,49 +322,36 @@ namespace Psd2UGUI
                 var elementName = layerName;
 
                 //解析为PsdElement
-                //分析其类型
-                PsdElement.ElementType type = PsdElement.ElementType.Group;
 
-                if (layer.HasImage)
+                //正则获取后缀与名字
+                var suffixRegex = "(?<=@).+";
+                var nameRegex = ".+(?=@)";
+                var suffix = "";
+                var name = elementName;
+                if (Regex.IsMatch(elementName, suffixRegex))
                 {
-                    type = PsdElement.ElementType.Image;
-                    if (elementName.EndsWith("@t"))
-                    {
-                        type = PsdElement.ElementType.Text;
-                        elementName = elementName.Replace("@t", "");
-                    }
+                    suffix = Regex.Match(elementName, suffixRegex).ToString();
+                    name = Regex.Match(elementName, nameRegex).ToString();
                 }
-                else
+
+                if (suffix == "@")
+                    continue;
+                var type = P2UUtil.GetTypeBySuffix(suffix, layer.HasImage);
+
+                if (type == PsdElement.ElementType.Null)
                 {
-                    if (elementName.EndsWith("@b"))
-                    {
-                        type = PsdElement.ElementType.Button;
-                        elementName = elementName.Replace("@b", "");
-                    }
-                    else if (elementName.EndsWith("@9"))
-                    {
-                        type = PsdElement.ElementType.Image9;
-                        elementName = elementName.Replace("@9", "");
-                    }
-                    else if (elementName.EndsWith("@l"))
-                    {
-                        type = PsdElement.ElementType.List;
-                        elementName = elementName.Replace("@l", "");
-                    }
-                    else if (elementName.EndsWith("@s"))
-                    {
-                        type = PsdElement.ElementType.SelectBox;
-                        elementName = elementName.Replace("@s", "");
-                    }
+                    Debug.LogError(elementName + "后缀使用错误");
+                    P2UUtil.AddError(elementName + "后缀使用错误");
+                    continue;
                 }
 
                 //添加子项
                 var childs = layer.Childs;
-                PsdElement element = PsdElement.GetPsdElement(elementName, layer, type, childs);
+                PsdElement element = PsdElement.GetPsdElement(name, layer, type, childs);
                 if (!map.ContainsKey(element.name))
                 {
                     if (type != PsdElement.ElementType.Group)
-                        map.Add(elementName, element);
+                        map.Add(name, element);
                 }
                 else
                 {
@@ -370,6 +364,9 @@ namespace Psd2UGUI
                 if (element.type == PsdElement.ElementType.Group)
                     GenerateElementMap(ref map, layerName, layer.Childs);
             }
+
+            P2UUtil.ShowError();
+            P2UUtil.ClearError();
         }
 
         //生成Graphic图片列表

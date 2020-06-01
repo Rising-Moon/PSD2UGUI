@@ -24,7 +24,7 @@ namespace Psd2UGUI.Element.Type
             else
             {
                 canShow = false;
-                P2UUtil.ShowError("九宫格图:" + name + "需要有一张九宫格大小的图");
+                P2UUtil.AddError("九宫格图:" + name + "需要有一张九宫格大小的图");
             }
 
             Preview = FindChildElement(previewSuffix);
@@ -33,7 +33,7 @@ namespace Psd2UGUI.Element.Type
             else
             {
                 canShow = false;
-                P2UUtil.ShowError("九宫格图:" + name + "需要有一张预览图来决定其大小");
+                P2UUtil.AddError("九宫格图:" + name + "需要有一张预览图来决定其大小");
             }
         }
 

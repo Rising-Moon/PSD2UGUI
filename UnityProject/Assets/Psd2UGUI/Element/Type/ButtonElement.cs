@@ -29,7 +29,7 @@ namespace Psd2UGUI.Element.Type
             else
             {
                 canShow = false;
-                P2UUtil.ShowError("按钮:" + name + "至少要有一张正常态的图片");
+                P2UUtil.AddError("按钮:" + name + "至少要有一张正常态的图片");
             }
 
             pressed = FindChildElement(pressedSuffix);
@@ -50,9 +50,6 @@ namespace Psd2UGUI.Element.Type
         //生成Preview
         public override void ModifyToPreview(RectTransform root, RectTransform t)
         {
-            if (!canShow)
-                return;
-
             ModifySize(root, t, this.normal);
             Rect btnRect = new Rect(0, 0, this.normal.Width, this.normal.Height);
 
@@ -81,9 +78,6 @@ namespace Psd2UGUI.Element.Type
         //生成UI
         public override void ModifyToUi(RectTransform root, RectTransform t, string[] sourceDirs)
         {
-            if (!canShow)
-                return;
-
             ModifySize(root, t, normal);
 
             Button button = t.GetComponent<Button>();
