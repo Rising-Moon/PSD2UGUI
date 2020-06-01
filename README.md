@@ -113,6 +113,12 @@
 #### Link Psd
 - Psd修改时是否进行同步
 
+## 扩展
+### 扩展Element类型
+- 创建新的Element类，继承PsdElement类
+- 在PsdElement中的ElementType添加一个新的枚举
+- 在P2UUtil.cs中修改GetTypeBySuffix与GetPsdElement方法，将后缀，类型以及新的Element类进行匹配
+
 ## 更新日志
 ### 0.2
 - 修复List只有一行时会出现错误的bug
