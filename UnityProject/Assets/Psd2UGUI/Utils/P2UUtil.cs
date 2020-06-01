@@ -1,5 +1,6 @@
 using System.Text;
 using Psd2UGUI.Element.Type;
+using SubjectNerd.PsdImporter.PsdParser;
 using UnityEditor;
 using UnityEngine;
 
@@ -81,6 +82,32 @@ namespace Psd2UGUI.Utils
             }
 
             return type;
+        }
+
+        /// <summary>
+        /// 根据其类型生成相应的Element
+        /// </summary>
+        /// <param name="name">element的名字</param>
+        /// <param name="layer">对应的PsdLayer</param>
+        /// <param name="type">Element的类型</param>
+        /// <param name="childs">当类型为组时，所带的子PsdLayer</param>
+        /// <returns>生成的对应类型的PsdElement</returns>
+        public static PsdElement GetPsdElement(string name, IPsdLayer layer, PsdElement.ElementType type,
+            IPsdLayer[] childs)
+        {
+            if (type == PsdElement.ElementType.Image)
+                return new ImageElement(name, layer, type, childs);
+            if (type == PsdElement.ElementType.Image9)
+                return new Image9Element(name, layer, type, childs);
+            if (type == PsdElement.ElementType.Button)
+                return new ButtonElement(name, layer, type, childs);
+            if (type == PsdElement.ElementType.Text)
+                return new TextElement(name, layer, type, childs);
+            if (type == PsdElement.ElementType.List)
+                return new ListElement(name, layer, type, childs);
+            if (type == PsdElement.ElementType.SelectBox)
+                return new SelectBoxElement(name, layer, type, childs);
+            return new PsdElement(name, layer, type, childs);
         }
     }
 }

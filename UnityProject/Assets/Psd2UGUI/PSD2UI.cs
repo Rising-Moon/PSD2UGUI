@@ -347,7 +347,7 @@ namespace Psd2UGUI
 
                 //添加子项
                 var childs = layer.Childs;
-                PsdElement element = PsdElement.GetPsdElement(name, layer, type, childs);
+                PsdElement element = P2UUtil.GetPsdElement(name, layer, type, childs);
                 if (!map.ContainsKey(element.name))
                 {
                     if (type != PsdElement.ElementType.Group)

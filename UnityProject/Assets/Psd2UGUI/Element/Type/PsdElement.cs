@@ -49,31 +49,13 @@ namespace Psd2UGUI.Element.Type
 
         public bool canShow;
 
-        protected PsdElement(string name, IPsdLayer layer, ElementType type, IPsdLayer[] childs)
+        public PsdElement(string name, IPsdLayer layer, ElementType type, IPsdLayer[] childs)
         {
             this.name = name;
             this.layer = layer;
             this.type = type;
             this.childs = childs;
             canShow = true;
-        }
-
-        //根据其类型生成相应的Element
-        public static PsdElement GetPsdElement(string name, IPsdLayer layer, ElementType type, IPsdLayer[] childs)
-        {
-            if (type == ElementType.Image)
-                return new ImageElement(name, layer, type, childs);
-            if (type == ElementType.Image9)
-                return new Image9Element(name, layer, type, childs);
-            if (type == ElementType.Button)
-                return new ButtonElement(name, layer, type, childs);
-            if (type == ElementType.Text)
-                return new TextElement(name, layer, type, childs);
-            if (type == ElementType.List)
-                return new ListElement(name, layer, type, childs);
-            if (type == ElementType.SelectBox)
-                return new SelectBoxElement(name, layer, type, childs);
-            return new PsdElement(name, layer, type, childs);
         }
 
         //获取Element上的Texture2D
