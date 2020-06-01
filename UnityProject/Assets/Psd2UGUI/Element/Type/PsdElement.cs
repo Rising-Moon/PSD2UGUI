@@ -103,7 +103,7 @@ namespace Psd2UGUI.Element.Type
             var texLayer = layer;
             t.anchoredPosition = new Vector2(
                                      texLayer.Left + texLayer.Width / 2f,
-                                     rootSize.y - (texLayer.Top + texLayer.Height / 2f) - 1
+                                     rootSize.y - (texLayer.Top + texLayer.Height / 2f)
                                  ) + rootOffest;
             t.sizeDelta = new Vector2(texLayer.Width, texLayer.Height);
 

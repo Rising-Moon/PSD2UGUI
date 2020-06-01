@@ -9,6 +9,7 @@ namespace Psd2UGUI.Element
     public class Psd2UiElement : MonoBehaviour
     {
         public PsdElement.ElementType type;
+        [HideInInspector] public string elementName;
         public bool linkPsd = true;
     }
 }

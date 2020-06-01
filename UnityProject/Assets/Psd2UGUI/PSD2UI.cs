@@ -29,7 +29,7 @@ namespace Psd2UGUI
         private GameObject preview;
 
         //显示图片边界
-        public bool drawGimzos = false;
+        //public bool drawGimzos = false;
         //显示RayCast区域
         public bool drawRaycast = false;
 
@@ -109,8 +109,10 @@ namespace Psd2UGUI
             LoadDocument();
 
             //调整页面大小
-            rectTransform.sizeDelta = new Vector2(psd.Width, psd.Height);
-            rectTransform.anchoredPosition = Vector2.zero;
+            var offset = rectTransform.anchorMax - rectTransform.anchorMin;
+            var psdSize = new Vector2(psd.Width, psd.Height);
+            rectTransform.sizeDelta = new Vector2(psd.Width, psd.Height) * (Vector2.one - offset);
+            rectTransform.anchoredPosition = ((Vector2.one - offset) / 2 - rectTransform.anchorMin) * psdSize;
 
             DestroyPreview();
 
@@ -252,14 +254,15 @@ namespace Psd2UGUI
                     go = uguiElementMap[elementName].gameObject;
                     parent = go.transform.parent;
                     siblingIndex = go.transform.GetSiblingIndex();
-                    Psd2UiElement psd2UiElement = go.GetComponent<Psd2UiElement>();
+                    Psd2UiElement psd2UiElement = uguiElementMap[elementName];
                     //当UI没有勾选对应到PSD时则不进行处理
                     if (!psd2UiElement.linkPsd)
                         continue;
                 }
                 else
                 {
-                    go = new GameObject(elementName);
+                    var name = elementName.Replace("-", "/");
+                    go = new GameObject(name);
                     go.transform.SetParent(rectTransform);
                     go.AddComponent<RectTransform>().localScale = Vector3.one;
                     go.transform.SetAsLastSibling();
@@ -271,7 +274,12 @@ namespace Psd2UGUI
 
                 //对各种类型的GameObject进行处理
                 if (go.GetComponent<Psd2UiElement>() == null)
-                    go.AddComponent<Psd2UiElement>().type = element.type;
+                {
+                    var psdUiElement = go.AddComponent<Psd2UiElement>();
+                    psdUiElement.type = element.type;
+                    psdUiElement.elementName = elementName;
+                }
+
                 element?.ModifyToUi(rectTransform, t, new[] {exportFolderPath});
 
                 //恢复GameObject的层级
@@ -381,10 +389,9 @@ namespace Psd2UGUI
         private void GenerateGraphicMap(ref Dictionary<string, Psd2UiElement> map, RectTransform rectTrans)
         {
             Psd2UiElement[] elements = rectTrans.GetComponentsInChildren<Psd2UiElement>(true);
-            Debug.Log("Graphic 数量:" + elements.Length);
             foreach (var graphic in elements)
             {
-                var name = graphic.gameObject.name;
+                var name = graphic.elementName;
                 if (!map.ContainsKey(name))
                 {
                     map.Add(name, graphic);
@@ -414,18 +421,18 @@ namespace Psd2UGUI
 
         private void OnDrawGizmos()
         {
-            if (drawGimzos)
-            {
-                Vector3[] vectors = new Vector3[4];
-                foreach (var t in GetComponentsInChildren<RectTransform>())
-                {
-                    t.GetWorldCorners(vectors);
-                    Gizmos.DrawLine(vectors[0], vectors[1]);
-                    Gizmos.DrawLine(vectors[1], vectors[2]);
-                    Gizmos.DrawLine(vectors[2], vectors[3]);
-                    Gizmos.DrawLine(vectors[3], vectors[0]);
-                }
-            }
+//            if (drawGimzos)
+//            {
+//                Vector3[] vectors = new Vector3[4];
+//                foreach (var t in GetComponentsInChildren<RectTransform>())
+//                {
+//                    t.GetWorldCorners(vectors);
+//                    Gizmos.DrawLine(vectors[0], vectors[1]);
+//                    Gizmos.DrawLine(vectors[1], vectors[2]);
+//                    Gizmos.DrawLine(vectors[2], vectors[3]);
+//                    Gizmos.DrawLine(vectors[3], vectors[0]);
+//                }
+//            }
 
             if (drawRaycast)
             {
@@ -433,14 +440,17 @@ namespace Psd2UGUI
                 {
                     if (g.raycastTarget)
                     {
+                        Gizmos.color = Color.white;
                         Vector3[] vectors = new Vector3[4];
                         RectTransform rectTransform = g.transform as RectTransform;
                         if (rectTransform != null) rectTransform.GetWorldCorners(vectors);
-                        Gizmos.color = Color.blue;
                         for (int i = 0; i < 4; i++)
                         {
                             Gizmos.DrawLine(vectors[i], vectors[(i + 1) % 4]);
                         }
+
+//                        Gizmos.color = new Color(0, 0, 1, 0.2f);
+//                        Gizmos.DrawCube((vectors[2] + vectors[0]) / 2, vectors[2] - vectors[0]);
                     }
                 }
             }

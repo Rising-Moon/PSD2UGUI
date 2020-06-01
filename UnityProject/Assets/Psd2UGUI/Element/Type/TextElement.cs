@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using SubjectNerd.PsdImporter.PsdParser;
 using TMPro;
 using UnityEngine;
@@ -40,7 +41,7 @@ namespace Psd2UGUI.Element.Type
 
             if (text.text == default)
             {
-                text.text = name;
+                text.text = Regex.Match(name, "(?!.*-).+").ToString();
             }
         }
     }
