@@ -241,6 +241,7 @@ namespace Psd2UGUI
                     continue;
 
                 Transform parent = null;
+                int siblingIndex = -1;
 
                 //查看对应GameObject是否存在，不存在则创建一个
                 GameObject go;
@@ -248,6 +249,7 @@ namespace Psd2UGUI
                 {
                     go = uguiElementMap[elementName].gameObject;
                     parent = go.transform.parent;
+                    siblingIndex = go.transform.GetSiblingIndex();
                     Psd2UiElement psd2UiElement = go.GetComponent<Psd2UiElement>();
                     //当UI没有勾选对应到PSD时则不进行处理
                     if (!psd2UiElement.linkPsd)
@@ -272,7 +274,11 @@ namespace Psd2UGUI
 
                 //恢复GameObject的层级
                 if (parent != null)
+                {
                     go.transform.SetParent(parent);
+                    go.transform.SetSiblingIndex(siblingIndex);
+                }
+
                 var locaPosition = t.localPosition;
                 t.localPosition = new Vector3(locaPosition.x, locaPosition.y, 0);
 

@@ -93,6 +93,7 @@ namespace Psd2UGUI.Element.Type
         protected void ModifySize(RectTransform root, RectTransform t, IPsdLayer layer)
         {
             var parent = t.parent;
+            var siblingIndex = t.GetSiblingIndex();
             t.SetParent(root);
             t.pivot = new Vector2(0.5f, 0.5f);
 
@@ -107,6 +108,7 @@ namespace Psd2UGUI.Element.Type
             t.sizeDelta = new Vector2(texLayer.Width, texLayer.Height);
 
             t.SetParent(parent);
+            t.SetSiblingIndex(siblingIndex);
         }
 
         //创建一个GameObject
