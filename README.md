@@ -78,27 +78,49 @@
 ### PSD2UI组件
 #### Asset
 - 用于生成UI的PSD文件
+
 #### Export Folder
 - 存储导出图片的文件夹
+
 #### Alpha
 - 预览图的透明度
+
 #### Draw Gizmos
 - 绘制UI各个GameObject的边界
+
 #### Draw Raycast
 - 绘制所有勾选了Is RayCast的组件的边界
+
 #### 显示预览效果
 - 生成预览图
+
 #### 关闭预览效果
 - 关闭预览图
+
 #### 导出图片
 - 将PSD中图片资源导出到导出文件夹中
+
 #### 生成UI界面
 - 使用导出文件夹中的图片生成UI界面
+
 #### 清空
 - 将当前GameObject下所有子GameObject删除
 
-### Psd 2 UI Element组件
+### Psd2UIElement组件
 #### Type
 - 表明当前GameObject对应的类型
+
 #### Link Psd
 - Psd修改时是否进行同步
+
+## 更新日志
+### 0.2
+- 修复List只有一行时会出现错误的bug
+- 为Psd2UIElement组件添加LinkPsd选项
+
+### 0.3
+- 添加了SelectBox类型
+- 修改了计算布局的方式，现在根GameObject可以更改锚点  
+- 将类型判断及根据类型生成相应Element的方法放到P2UUtil.cs中  
+- 更改了匹配规则，现在生成UI后的GameObject名字可以进行更改  
+- 剪短了Text类型生成UI时的默认内容
