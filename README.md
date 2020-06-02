@@ -20,3 +20,7 @@
 - 将类型判断及根据类型生成相应Element的方法放到P2UUtil.cs中  
 - 更改了匹配规则，现在生成UI后的GameObject名字可以进行更改  
 - 剪短了Text类型生成UI时的默认内容
+
+### 0.4
+- 调整文档结构
+- 将于编辑器相关的代码从PSD2UI.cs中移动到PSD2UIInpector.cs中
