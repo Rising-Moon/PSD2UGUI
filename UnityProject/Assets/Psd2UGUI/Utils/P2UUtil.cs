@@ -1,8 +1,6 @@
-using System.Text;
 using Psd2UGUI.Element.Type;
 using SubjectNerd.PsdImporter.PsdParser;
 using UnityEditor;
-using UnityEngine;
 
 namespace Psd2UGUI.Utils
 {
