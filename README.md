@@ -6,8 +6,8 @@
 - 将PSD文件转换为Unity中的UGUI
 
 ## 文档
-[美术]()  
-[程序]()
+[美术](https://gitee.com/Rising-Moon/PSD2UGUI/blob/develop/Document/%E7%BE%8E%E6%9C%AF%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3.md)  
+[程序](https://gitee.com/Rising-Moon/PSD2UGUI/blob/develop/Document/%E7%A8%8B%E5%BA%8F%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3.md)
 
 ## 更新日志
 ### 0.2
