@@ -171,6 +171,10 @@ namespace Psd2UGUI
             elementMap = new Dictionary<string, PsdElement>();
             GenerateElementMap(ref elementMap, asset.name, psd.Childs);
 
+            //导出图片进度
+            var progress = 0f;
+            var section = 1f / elementMap.Count;
+
             foreach (var pair in elementMap)
             {
                 var element = pair.Value;
@@ -181,6 +185,7 @@ namespace Psd2UGUI
                     if (piece == null)
                         continue;
                     var filePath = Path.Combine(exportPath + "/", piece.name + ".png");
+                    EditorUtility.DisplayProgressBar("导出图片", piece.name + ".png", progress);
                     if (!File.Exists(filePath))
                     {
                         File.Create(filePath).Dispose();
@@ -205,7 +210,12 @@ namespace Psd2UGUI
                         importer.SaveAndReimport();
                     }
                 }
+
+                progress += section;
+                EditorUtility.DisplayProgressBar("导出图片", "", progress);
             }
+
+            EditorUtility.ClearProgressBar();
 
             Debug.Log("导出完成");
         }
